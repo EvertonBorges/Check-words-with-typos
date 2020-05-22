@@ -4,6 +4,6 @@
     <string name="second_word">Second Word</string>
     <string name="check_words">Check Words</string>
     <string name="result">Result</string>
-    <string name="result_true">These words have on or no typos between them.</string>
+    <string name="result_true">These words have one or no typos between them.</string>
     <string name="result_false">These words have more than one typo between them.</string>
 </resources>
