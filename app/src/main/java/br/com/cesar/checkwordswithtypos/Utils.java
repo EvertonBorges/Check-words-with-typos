@@ -14,23 +14,7 @@ class Utils {
 
     private static boolean checkInsertTypo(String firstWord, String secondWord) {
         if (secondWord.length() - firstWord.length() == 1) {
-            final String differentLettersBetweenSecondWordAndFirstWord =
-                    getDifferentLettersBetween(secondWord, firstWord);
-
-            if (differentLettersBetweenSecondWordAndFirstWord.length() == 1) {
-                for(int i = 0; i < firstWord.length(); i++) {
-                    final String compareString =
-                            firstWord.substring(0, i) +
-                            differentLettersBetweenSecondWordAndFirstWord +
-                            firstWord.substring(i);
-
-                    if (compareString.equals(secondWord)) return true;
-                }
-                final String compareString =
-                        firstWord + differentLettersBetweenSecondWordAndFirstWord;
-
-                return compareString.equals(secondWord);
-            }
+            return isTypoInsertOrRemoveBetween(secondWord, firstWord);
         }
 
         return false;
@@ -38,24 +22,7 @@ class Utils {
 
     private static boolean checkRemoveTypo(String firstWord, String secondWord) {
         if (firstWord.length() - secondWord.length() == 1) {
-            final String differentLettersBetweemFirstWordAndSecondWord =
-                    getDifferentLettersBetween(firstWord, secondWord);
-
-            if (differentLettersBetweemFirstWordAndSecondWord.length() == 1) {
-                for(int i = 0; i < secondWord.length(); i++) {
-                    final String compareString =
-                            secondWord.substring(0, i) +
-                            differentLettersBetweemFirstWordAndSecondWord +
-                            secondWord.substring(i);
-
-                    if (compareString.equals(firstWord)) return true;
-                }
-                final String compareString =
-                        secondWord +
-                        differentLettersBetweemFirstWordAndSecondWord;
-
-                return compareString.equals(firstWord);
-            }
+            return isTypoInsertOrRemoveBetween(firstWord, secondWord);
         }
 
         return false;
@@ -63,45 +30,35 @@ class Utils {
 
     private static boolean checkReplaceTypo(String firstWord, String secondWord) {
         if (firstWord.length() == secondWord.length()) {
-            final String differentLettersBetweenFirstWordAndSecondWord =
-                    getDifferentLettersBetween(firstWord, secondWord);
-            final String differentLettersBetweenSecondWordAndFirstWord =
-                    getDifferentLettersBetween(secondWord, firstWord);
-
-            if (differentLettersBetweenFirstWordAndSecondWord.length() == 1 &&
-                    differentLettersBetweenSecondWordAndFirstWord.length() == 1) {
-                int differentLetterPositionInFirstWord = 0;
-                for(int i = 0; i < firstWord.length(); i++) {
-                    if (differentLettersBetweenFirstWordAndSecondWord.charAt(0) ==
-                            firstWord.charAt(i)) {
-                        differentLetterPositionInFirstWord = i;
-                        break;
-                    }
-                }
-
-                int differentLetterPositionInSecondWord = 0;
-                for(int i = 0; i < firstWord.length(); i++) {
-                    if (differentLettersBetweenSecondWordAndFirstWord.charAt(0) ==
-                            secondWord.charAt(i)) {
-                        differentLetterPositionInSecondWord = i;
-                        break;
-                    }
-                }
-
-                return differentLetterPositionInFirstWord == differentLetterPositionInSecondWord;
-            }
-
+            return isTypoReplaceBetween(firstWord, secondWord);
         }
 
         return false;
     }
 
-    private static String getDifferentLettersBetween(String word, String compareWord) {
-        String differentLetter = word;
-        for(int i = 0; i < compareWord.length(); i++) {
-            differentLetter = differentLetter.replace(String.valueOf(compareWord.charAt(i)), "");
+    private static boolean isTypoInsertOrRemoveBetween(String word, String compareWord) {
+        if (word.contains(compareWord)) return true;
+
+        for(int i = 0; i < word.length(); i++) {
+            final String newWordToCompare = word.substring(0, i) + word.substring(i + 1);
+            if (newWordToCompare.equals(compareWord)) return true;
         }
-        return differentLetter;
+
+        return false;
+    }
+
+    private static boolean isTypoReplaceBetween(String word, String compareWord) {
+        for(int i = 0; i < compareWord.length(); i++) {
+            final String firstWordToCompare =
+                    word.substring(0, i) + word.substring(i + 1);
+
+            final String secondWordToCompare =
+                    compareWord.substring(0, i) + compareWord.substring(i + 1);
+
+            if (firstWordToCompare.equals(secondWordToCompare)) return true;
+        }
+
+        return false;
     }
 
 }
